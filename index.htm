@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Soal Organisasi Pergerakan Nasional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 min-h-screen text-slate-800 antialiased py-6 px-4">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- HEADER / TITLE -->
+        <header class="text-center mb-8 glass-card rounded-2xl p-6 shadow-2xl border border-indigo-500/20">
+            <div class="inline-block p-3 bg-indigo-100 text-indigo-700 rounded-full mb-3">
+                <i class="fas fa-landmark-dome text-2xl"></i>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-tight">
+                Latihan Soal Organisasi Pergerakan Nasional
+            </h1>
+            <p class="text-indigo-600 font-medium text-sm md:text-base mt-1">
+                Sarana Perjuangan Melawan Kolonialisme Di Indonesia
+            </p>
+        </header>
+
+        <!-- PAGE 1: LOGIN -->
+        <div id="loginPage" class="glass-card rounded-2xl p-6 md:p-10 shadow-2xl border border-indigo-500/20">
+            <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2 border-b pb-3">
+                <i class="fas fa-user-graduate text-indigo-600"></i> Identitas Peserta Didik
+            </h2>
+            <form id="loginForm" onsubmit="startQuiz(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
+                    <input type="text" id="studentName" required placeholder="Masukkan nama lengkap Anda..."
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Kelas</label>
+                    <select id="studentClass" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
+                        <option value="" disabled selected>-- Pilih Kelas --</option>
+                        <option value="XI 5">XI 5</option>
+                        <option value="XI 6">XI 6</option>
+                        <option value="XI 7">XI 7</option>
+                        <option value="XI 8">XI 8</option>
+                        <option value="XI 9">XI 9</option>
+                    </select>
+                </div>
+                <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100 text-xs md:text-sm text-indigo-900 space-y-1">
+                    <p class="font-semibold"><i class="fas fa-info-circle mr-1"></i> Ketentuan Pengerjaan:</p>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600">
+                        <li>Jumlah Soal: 30 Butir (PG A-E, PGK A-E, Benar/Salah)</li>
+                        <li>Tingkat Kesulitan: C3 (Aplikasi), C4 (Analisis), C5 (Evaluasi)</li>
+                        <li>Total Maksimal Skor: <strong>100 Point</strong></li>
+                    </ul>
+                </div>
+                <button type="submit"
+                    class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-indigo-500/30 transition duration-200">
+                    Mulai Mengerjakan <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- PAGE 2: QUIZ -->
+        <div id="quizPage" class="hidden glass-card rounded-2xl p-6 md:p-8 shadow-2xl border border-indigo-500/20">
+            <!-- Student Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200 text-sm font-medium text-slate-600">
+                <div class="flex items-center gap-2">
+                    <span class="p-2 bg-indigo-100 text-indigo-700 rounded-lg"><i class="fas fa-user"></i></span>
+                    <span id="displayStudentInfo" class="font-bold text-slate-800"></span>
+                </div>
+                <div class="bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                    <span id="questionCounter" class="text-indigo-600 font-bold">1</span> / 30 Soal
+                </div>
+            </div>
+
+            <!-- Question Container -->
+            <form id="quizForm" onsubmit="submitQuiz(event)" class="mt-6 space-y-8">
+                <div id="questionsContainer" class="space-y-8"></div>
+
+                <div class="pt-6 border-t border-slate-200 flex justify-between items-center">
+                    <p class="text-xs text-slate-500">*Pastikan semua jawaban telah terisi sebelum mengirim.</p>
+                    <button type="submit" id="submitBtn"
+                        class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg hover:shadow-emerald-500/30 transition duration-200">
+                        Kirim Jawaban <i class="fas fa-paper-plane ml-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- PAGE 3: RESULT -->
+        <div id="resultPage" class="hidden glass-card rounded-2xl p-8 text-center shadow-2xl border border-indigo-500/20 space-y-6">
+            <div class="inline-block p-4 bg-emerald-100 text-emerald-600 rounded-full">
+                <i class="fas fa-check-circle text-5xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800">Jawaban Berhasil Terkirim!</h2>
+            <p class="text-slate-600">Terima kasih telah menyelesaikan latihan soal organisasi pergerakan nasional.</p>
+            
+            <div class="max-w-md mx-auto p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                <div class="text-sm text-slate-500">Nilai Akhir Anda</div>
+                <div id="scoreDisplay" class="text-5xl font-black text-indigo-600">0</div>
+                <div class="text-xs text-slate-400">Dari total poin maksimal 100</div>
+            </div>
+
+            <div id="syncStatus" class="p-3 bg-blue-50 text-blue-700 rounded-xl text-xs md:text-sm font-medium">
+                <i class="fas fa-spinner fa-spin mr-2"></i> Mengirimkan nilai ke Google Sheets...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GANTI DENGAN URL WEB APP HASIL DEPLOY APPS SCRIPT ANDA
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjC7DylANasiyz7JIo3PzTK4Ttnxb9qTG1Jr0HkyejSq44zs0DXy9WhNruNgW1UYfe/exec"; 
+
+        let studentData = { name: "", class: "" };
+
+        // DATA SOAL
+        const questionsData = [
+            {
+                id: 1, type: "pg", cognitive: "C3", weight: 3,
+                question: "Budi Utomo (BU) didirikan pada tanggal 20 Mei 1908 dan diakui sebagai organisasi modern pertama di Indonesia yang menginspirasi lahirnya pergerakan nasional. Tokoh yang memelopori berdirinya Budi Utomo adalah...",
+                options: [
+                    "A. H. Samanhudi", 
+                    "B. Dr. Wahidin Soedirohoesodo", 
+                    "C. R. Satiman Wiryosanjoyo", 
+                    "D. Douwes Dekker",
+                    "E. K.H. Ahmad Dahlan"
+                ],
+                answer: "B. Dr. Wahidin Soedirohoesodo"
+            },
+            {
+                id: 2, type: "pg", cognitive: "C3", weight: 3,
+                question: "Sarekat Dagang Islam (SDI) didirikan pada tahun 1911 di Laweyan, Solo oleh seorang pedagang batik yang berniat melindungi pedagang lokal. Tokoh pendiri tersebut adalah...",
+                options: [
+                    "A. H. Samanhudi",
+                    "B. H.O.S. Tjokroaminoto",
+                    "C. Semaun",
+                    "D. Darsono",
+                    "E. Mohammad Hatta"
+                ],
+                answer: "A. H. Samanhudi"
+            },
+            {
+                id: 3, type: "pg", cognitive: "C3", weight: 3,
+                question: "Indische Partij (IP) didirikan di Bandung pada 25 Desember 1912 oleh Tiga Serangkai. Tokoh-tokoh yang termasuk dalam Tiga Serangkai adalah...",
+                options: [
+                    "A. Soekarno, Moh. Hatta, dan Sutan Sjahrir", 
+                    "B. Douwes Dekker, dr. Cipto Mangunkusumo, dan Suwardi Suryaningrat", 
+                    "C. Dr. Wahidin Soedirohoesodo, Sutomo, dan Surjoadipoetro", 
+                    "D. H. Samanhudi, K.H. Ahmad Dahlan, dan H.O.S. Tjokroaminoto",
+                    "E. Sutan Kasajangan Soripada, R.M. Noto Soeroto, dan Soekiman"
+                ],
+                answer: "B. Douwes Dekker, dr. Cipto Mangunkusumo, dan Suwardi Suryaningrat"
+            },
+            {
+                id: 4, type: "pg", cognitive: "C4", weight: 3,
+                question: "Perhimpunan Indonesia (PI) pada tahun 1925 mengalami perubahan sikap politik menjadi radikal dan nonkooperatif di bawah kepemimpinan Soekiman Wirjosandjojo. Faktor utama yang menandai perubahan politik organisasi ini adalah...",
+                options: [
+                    "A. Pembentukan benteng pertahanan bersama gabungan partai politik di Jawa",
+                    "B. Penggunaan kata 'Indonesia' sebagai nama organisasi yang membawa pengaruh serta visi politik tegas",
+                    "C. Pembentukan serikat buruh tani secara eksklusif di wilayah Belanda",
+                    "D. Kesepakatan kerja sama penuh dengan pemerintah kolonial Belanda dalam Volksraad",
+                    "E. Penerbitan surat kabar Daulat Rakyat untuk menyebarkan paham keagamaan"
+                ],
+                answer: "B. Penggunaan kata 'Indonesia' sebagai nama organisasi yang membawa pengaruh serta visi politik tegas"
+            },
+            {
+                id: 5, type: "pg", cognitive: "C4", weight: 3,
+                question: "Indische Social Democratische Vereeniging (ISDV) yang didirikan oleh B.J.F.M. Sneevliet berhasil memperluas pengaruhnya di Indonesia melalui strategi...",
+                options: [
+                    "A. Menyelenggarakan Kongres Perempuan di Yogyakarta",
+                    "B. Mendirikan Sekolah Kartini di berbagai kota besar",
+                    "C. Taktik infiltrasi (menyusup) ke dalam organisasi Sarekat Islam",
+                    "D. Menggalang dana melalui Petisi Sutardjo di Volksraad",
+                    "E. Membuka cabang perguruan Taman Siswa di Semarang"
+                ],
+                answer: "C. Taktik infiltrasi (menyusup) ke dalam organisasi Sarekat Islam"
+            },
+            {
+                id: 6, type: "pg", cognitive: "C4", weight: 3,
+                question: "Setelah PNI (lama) dibubarkan, terjadi perbedaan pandangan di antara para anggotanya. Golongan yang menolak pembubaran PNI kemudian membentuk Pendidikan Nasional Indonesia (PNI Baru) di bawah pimpinan...",
+                options: [
+                    "A. Mr. Sartono dan Ir. Soekarno",
+                    "B. Moh. Hatta dan Sutan Sjahrir",
+                    "C. M.H. Thamrin dan Kusumo Utoyo",
+                    "D. Semaun dan Darsono",
+                    "E. Dewi Sartika dan R.A. Kartini"
+                ],
+                answer: "B. Moh. Hatta dan Sutan Sjahrir"
+            },
+            {
+                id: 7, type: "pg", cognitive: "C4", weight: 3,
+                question: "Ki Hajar Dewantara merumuskan tiga konsep pengajaran dalam kegiatan pendidikan di Perguruan Taman Siswa. Maksud dari asas 'Ing Ngarso Sung Tulodo' adalah...",
+                options: [
+                    "A. Guru wajib membimbing siswa untuk menggali sendiri pengetahuannya",
+                    "B. Guru harus dapat memberi contoh dan teladan melalui sikap serta perilaku yang baik",
+                    "C. Guru memberikan motivasi dan bimbingan terus-menerus sesuai minat siswa",
+                    "D. Guru bertindak sebagai pengawas ketat dalam disiplin organisasi",
+                    "E. Guru memfasilitasi kebutuhan sarana fisik perjuangan militer"
+                ],
+                answer: "B. Guru harus dapat memberi contoh dan teladan melalui sikap serta perilaku yang baik"
+            },
+            {
+                id: 8, type: "pg", cognitive: "C4", weight: 3,
+                question: "Pergerakan nasional pada Periode Bertahan ditandai dengan sikap organisasi yang kembali moderat dan kooperatif. Penyebab utama perubahan sikap ini adalah...",
+                options: [
+                    "A. Keberhasilan aksi pemogokan buruh secara nasional",
+                    "B. Pengetatan pengawasan dan pembatasan ketat oleh pemerintah kolonial melalui aturan seperti Vergader Verbond",
+                    "C. Diterimanya Petisi Sutardjo secara utuh oleh Ratu Belanda",
+                    "D. Dibubarkannya Volksraad oleh Gubernur Jenderal B.C. de Jonge",
+                    "E. Menguatnya dukungan militer dari Jepang di perairan Asia"
+                ],
+                answer: "B. Pengetatan pengawasan dan pembatasan ketat oleh pemerintah kolonial melalui aturan seperti Vergader Verbond"
+            },
+            {
+                id: 9, type: "pg", cognitive: "C4", weight: 3,
+                question: "Partai Indonesia Raya (Parindra) didirikan pada Desember 1935 di Surakarta di bawah pimpinan dr. Sutomo. Organisasi ini merupakan hasil fusi (penggabungan) dari...",
+                options: [
+                    "A. Sarekat Islam dan Indische Partij",
+                    "B. Budi Utomo dan Persatuan Bangsa Indonesia (PBI)",
+                    "C. Partindo dan PNI Baru",
+                    "D. Trikoro Dharmo dan Jong Sumatranen Bond",
+                    "E. ISDV dan Perhimpunan Indonesia"
+                ],
+                answer: "B. Budi Utomo dan Persatuan Bangsa Indonesia (PBI)"
+            },
+            {
+                id: 10, type: "pg", cognitive: "C4", weight: 3,
+                question: "Gabungan Politik Indonesia (GAPI) yang didirikan oleh M.H. Thamrin pada tahun 1939 memiliki tujuan dan asas perjuangan utama, yaitu...",
+                options: [
+                    "A. Menolak kerja sama dengan bentuk dewan perwakilan apapun",
+                    "B. Hak menentukan nasib sendiri dan persatuan aksi seluruh pergerakan Indonesia",
+                    "C. Menghapuskan tradisi kebudayaan lokal di seluruh Hindia Belanda",
+                    "D. Mendirikan perkumpulan dagang tunggal khusus komoditas batik",
+                    "E. Mengintegrasikan seluruh perguruan tinggi ke dalam sistem Belanda"
+                ],
+                answer: "B. Hak menentukan nasib sendiri dan persatuan aksi seluruh pergerakan Indonesia"
+            },
+            {
+                id: 11, type: "pg", cognitive: "C5", weight: 3,
+                question: "Evaluasilah perbedaan mendasar karakteristik perjuangan bangsa Indonesia melawan kolonialisme sebelum dan sesudah tahun 1908...",
+                options: [
+                    "A. Perjuangan sesudah 1908 bersifat kedaerahan sedangkan sebelum 1908 bersifat nasional",
+                    "B. Perjuangan sebelum 1908 dipimpin kaum terpelajar sedangkan sesudah 1908 dipimpin oleh raja dan bangsawan",
+                    "C. Perjuangan sesudah 1908 menggunakan organisasi modern, diplomasi, serta dipimpin kaum terpelajar",
+                    "D. Perjuangan sebelum 1908 terfokus pada kaderisasi organisasi yang tersusun rapi",
+                    "E. Perjuangan sesudah 1908 bersifat spontan dan reaktif tanpa visi merdeka"
+                ],
+                answer: "C. Perjuangan sesudah 1908 menggunakan organisasi modern, diplomasi, serta dipimpin kaum terpelajar"
+            },
+            {
+                id: 12, type: "pg", cognitive: "C5", weight: 3,
+                question: "Analisis faktor eksternal yang turut mendorong lahirnya organisasi pergerakan nasional di Indonesia adalah...",
+                options: [
+                    "A. Kemunculan kaum terpelajar lulusan STOVIA",
+                    "B. Kemenangan Jepang atas Rusia pada perang tahun 1905",
+                    "C. Tumbuhnya kenangan kejayaan masa lalu seperti Sriwijaya dan Majapahit",
+                    "D. Kejadian penderitaan rakyat akibat kebijakan Tanam Paksa",
+                    "E. Kekecewaan atas pembatasan hak berorganisasi di Jawa"
+                ],
+                answer: "B. Kemenangan Jepang atas Rusia pada perang tahun 1905"
+            },
+            {
+                id: 13, type: "pg", cognitive: "C5", weight: 3,
+                question: "Evaluasilah pemikiran R.A. Kartini yang dituangkan dalam kumpulan surat-suratnya 'Door Duisternis Tot Licht' (Habis Gelap Terbitlah Terang)...",
+                options: [
+                    "A. Menuntut pembentukan pasukan militer khusus wanita untuk melawan Belanda",
+                    "B. Memperjuangkan hak-hak perempuan dan pendidikan yang dikenal dengan istilah emansipasi",
+                    "C. Mendesak pembubaran seluruh sekolah binaan pemerintah kolonial",
+                    "D. Mengusulkan pemindahan pusat pemerintahan ke wilayah Rembang",
+                    "E. Menolak penggabungan organisasi-organisasi pemuda regional"
+                ],
+                answer: "B. Memperjuangkan hak-hak perempuan dan pendidikan yang dikenal dengan istilah emansipasi"
+            },
+            {
+                id: 14, type: "pg", cognitive: "C3", weight: 3,
+                question: "Organisasi pemuda pertama yang berdiri pada tahun 1915 di gedung STOVIA Jakarta oleh R. Satiman Wiryosanjoyo dan kelak menjadi cikal bakal Jong Java adalah...",
+                options: [
+                    "A. Jong Sumatranen Bond", 
+                    "B. Trikoro Dharmo", 
+                    "C. Sarekat Celebes", 
+                    "D. Perkumpulan Pasundan",
+                    "E. Young Batak Bonds"
+                ],
+                answer: "B. Trikoro Dharmo"
+            },
+            {
+                id: 15, type: "pg", cognitive: "C4", weight: 3,
+                question: "Cita-cita dan propaganda Indische Partij disebarluaskan kepada masyarakat luas melalui media...",
+                options: [
+                    "A. Surat kabar Daulat Rakyat",
+                    "B. Surat kabar De Expres",
+                    "C. Majalah Oetoesan Hindia",
+                    "D. Radio Volksraad",
+                    "E. Buletin Budi Utomo"
+                ],
+                answer: "B. Surat kabar De Expres"
+            },
+            {
+                id: 16, type: "pgk", cognitive: "C4", weight: 4,
+                question: "Pilihlah opsi yang BENAR mengenai faktor internal pendorong lahirnya organisasi pergerakan nasional Indonesia! (Pilih semua yang tepat)",
+                options: [
+                    "Munculnya kaum terpelajar di Indonesia",
+                    "Kondisi sosial, politik, dan ekonomi yang parah akibat penjajahan",
+                    "Kemenangan Jepang atas Rusia dalam perang tahun 1905",
+                    "Tumbuhnya kenangan akan kejayaan bangsa pada masa lampau",
+                    "Masuk dan berkembangnya paham-paham baru dari Eropa dan Amerika"
+                ],
+                answers: [
+                    "Munculnya kaum terpelajar di Indonesia",
+                    "Kondisi sosial, politik, dan ekonomi yang parah akibat penjajahan",
+                    "Tumbuhnya kenangan akan kejayaan bangsa pada masa lampau"
+                ]
+            },
+            {
+                id: 17, type: "pgk", cognitive: "C4", weight: 4,
+                question: "Manakah organisasi yang tergolong ke dalam 'Periode Awal Perkembangan' dalam pergerakan nasional Indonesia? (Pilih semua yang benar)",
+                options: [
+                    "Budi Utomo (BU)",
+                    "Sarekat Islam (SI)",
+                    "Muhammadiyah",
+                    "Perhimpunan Indonesia (PI)",
+                    "Partai Nasional Indonesia (PNI)"
+                ],
+                answers: [
+                    "Budi Utomo (BU)",
+                    "Sarekat Islam (SI)",
+                    "Muhammadiyah"
+                ]
+            },
+            {
+                id: 18, type: "pgk", cognitive: "C4", weight: 4,
+                question: "Pilihlah tiga visi politik utama dari Perhimpunan Indonesia (PI) setelah berhaluan radikal dan nonkooperatif!",
+                options: [
+                    "Indonesia ingin menentukan nasibnya sendiri",
+                    "Bangsa Indonesia mengandalkan kemampuan dan kekuatannya sendiri",
+                    "Bangsa Indonesia harus bersatu untuk melawan penjajah",
+                    "Mendukung kebijakan Tanam Paksa secara terbatas",
+                    "Bekerja sama erat dengan Dewan Volksraad"
+                ],
+                answers: [
+                    "Indonesia ingin menentukan nasibnya sendiri",
+                    "Bangsa Indonesia mengandalkan kemampuan dan kekuatannya sendiri",
+                    "Bangsa Indonesia harus bersatu untuk melawan penjajah"
+                ]
+            },
+            {
+                id: 19, type: "pgk", cognitive: "C4", weight: 4,
+                question: "Slogan/Semboyan terkenal yang diusung oleh Indische Partij (IP) dalam memperjuangkan kemerdekaan adalah... (Pilih semua yang relevan)",
+                options: [
+                    "Indische los van Holland",
+                    "Indie voor Indiers",
+                    "Bhinneka Tunggal Ika",
+                    "Ing Ngarso Sung Tulodo",
+                    "Tut Wuri Handayani"
+                ],
+                answers: [
+                    "Indische los van Holland",
+                    "Indie voor Indiers"
+                ]
+            },
+            {
+                id: 20, type: "pgk", cognitive: "C5", weight: 4,
+                question: "Pilihlah bentuk perjuangan para tokoh pribumi di dalam Volksraad pada Periode Bertahan!",
+                options: [
+                    "Melancarkan protest terhadap penggeledahan rumah pemimpin PNI",
+                    "Memperjuangkan nasib buruh di Sumatra",
+                    "Mendesak dicabutnya Ordonansi Sekolah Liar",
+                    "Menggalang serangan militer fisik serentak di pelabuhan",
+                    "Menuntut penghilangan perbedaan gaji prajurit bumiputra dan prajurit Belanda"
+                ],
+                answers: [
+                    "Melancarkan protest terhadap penggeledahan rumah pemimpin PNI",
+                    "Memperjuangkan nasib buruh di Sumatra",
+                    "Mendesak dicabutnya Ordonansi Sekolah Liar",
+                    "Menuntut penghilangan perbedaan gaji prajurit bumiputra dan prajurit Belanda"
+                ]
+            },
+            {
+                id: 21, type: "pgk", cognitive: "C4", weight: 4,
+                question: "Pilihlah nama-nama tokoh besar nasional yang lahir dan tumbuh dari organisasi kepemudaan Jong Sumatranen Bond (JSB)!",
+                options: [
+                    "Mohammad Hatta",
+                    "Mohammad Yamin",
+                    "Bahder Johan",
+                    "K.H. Ahmad Dahlan",
+                    "dr. Sutomo"
+                ],
+                answers: [
+                    "Mohammad Hatta",
+                    "Mohammad Yamin",
+                    "Bahder Johan"
+                ]
+            },
+            {
+                id: 22, type: "pgk", cognitive: "C5", weight: 4,
+                question: "Analisislah tiga prinsip/ajaran kepemimpinan pendidikan yang dirumuskan oleh Ki Hajar Dewantara di Perguruan Taman Siswa!",
+                options: [
+                    "Ing ngarsa sung tulodo",
+                    "Ing madyo mangun karsa",
+                    "Tut wuri handayani",
+                    "Indie voor Indiers",
+                    "Indische los van Holland"
+                ],
+                answers: [
+                    "Ing ngarsa sung tulodo",
+                    "Ing madyo mangun karsa",
+                    "Tut wuri handayani"
+                ]
+            },
+            {
+                id: 23, type: "pgk", cognitive: "C4", weight: 4,
+                question: "Siapa sajakah tokoh pergerakan nasional yang memprakarsai atau memimpin organisasi pada Periode Radikal?",
+                options: [
+                    "Ir. Soekarno (PNI)",
+                    "Moh. Hatta (PI & PNI Baru)",
+                    "Sutan Sjahrir (PNI Baru)",
+                    "M.H. Thamrin (Fraksi Nasional & GAPI)",
+                    "K.H. Ahmad Dahlan (Muhammadiyah)"
+                ],
+                answers: [
+                    "Ir. Soekarno (PNI)",
+                    "Moh. Hatta (PI & PNI Baru)",
+                    "Sutan Sjahrir (PNI Baru)"
+                ]
+            },
+            {
+                id: 24, type: "pgk", cognitive: "C5", weight: 4,
+                question: "Pernyataan berikut yang tepat mengenai organisasi gerakan perempuan pada masa pergerakan nasional adalah...",
+                options: [
+                    "Dewi Sartika mengasuh Perkoempoelan Keoetamaan Istri",
+                    "Sekolah Kartini didirikan di berbagai kota seperti Jakarta, Bogor, Madiun, dan Rembang",
+                    "Kongres Perempuan Indonesia I berlangsung di Yogyakarta pada 25–28 Desember 1928",
+                    "P4A dibentuk untuk menangani pemberantasan perdagangan perempuan dan anak",
+                    "Seluruh gerakan perempuan menolak pendidikan bagi anak-anak bumiputra"
+                ],
+                answers: [
+                    "Dewi Sartika mengasuh Perkoempoelan Keoetamaan Istri",
+                    "Sekolah Kartini didirikan di berbagai kota seperti Jakarta, Bogor, Madiun, dan Rembang",
+                    "Kongres Perempuan Indonesia I berlangsung di Yogyakarta pada 25–28 Desember 1928",
+                    "P4A dibentuk untuk menangani pemberantasan perdagangan perempuan dan anak"
+                ]
+            },
+            {
+                id: 25, type: "pgk", cognitive: "C5", weight: 4,
+                question: "Apa saja faktor luar/dalam yang melatarbelakangi lahirnya Periode Radikal dalam pergerakan nasional?",
+                options: [
+                    "Pengaruh Doktrin Wilson dan Revolusi Rusia 1917",
+                    "Kekecewaan terhadap Janji November (November Belofte)",
+                    "Perubahan Pasal 111 RR (Regerings Reglement)",
+                    "Pemakaian kata 'Indonesia' sebagai identitas perjuangan",
+                    "Penerapan sistem Hak Tawan Karang di pesisir Jawa"
+                ],
+                answers: [
+                    "Pengaruh Doktrin Wilson dan Revolusi Rusia 1917",
+                    "Kekecewaan terhadap Janji November (November Belofte)",
+                    "Perubahan Pasal 111 RR (Regerings Reglement)",
+                    "Pemakaian kata 'Indonesia' sebagai identitas perjuangan"
+                ]
+            },
+            {
+                id: 26, type: "bs", cognitive: "C3", weight: 3,
+                question: "Pernyataan: Tanggal kelahiran Budi Utomo, yaitu 20 Mei, hingga kini diperingati oleh bangsa Indonesia sebagai Hari Kebangkitan Nasional.",
+                answer: "BENAR"
+            },
+            {
+                id: 27, type: "bs", cognitive: "C3", weight: 3,
+                question: "Pernyataan: Muhammadiyah didirikan oleh K.H. Ahmad Dahlan di Yogyakarta pada 18 November 1912 dengan asas Islam dan kebangsaan serta bersifat nonpolitik.",
+                answer: "BENAR"
+            },
+            {
+                id: 28, type: "bs", cognitive: "C4", weight: 3,
+                question: "Pernyataan: Perhimpunan Indonesia (PI) yang didirikan di Belanda pada 1908 sejak awal berdirinya langsung bersikap radikal dan menolak bekerja sama dengan pemerintah Belanda.",
+                answer: "SALAH"
+            },
+            {
+                id: 29, type: "bs", cognitive: "C4", weight: 3,
+                question: "Pernyataan: Kongres Pemuda II yang berlangsung di Jakarta pada 26–28 Oktober 1928 menghasilkan ikrar persatuan yang dikenal sebagai Sumpah Pemuda.",
+                answer: "BENAR"
+            },
+            {
+                id: 30, type: "bs", cognitive: "C5", weight: 3,
+                question: "Pernyataan: Asas perjuangan Gabungan Politik Indonesia (GAPI) melarang keras persatuan aksi seluruh pergerakan nasional dalam bidang politik dan sosial.",
+                answer: "SALAH"
+            }
+        ];
+
+        // START QUIZ
+        function startQuiz(e) {
+            e.preventDefault();
+            studentData.name = document.getElementById('studentName').value.trim();
+            studentData.class = document.getElementById('studentClass').value;
+
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('quizPage').classList.remove('hidden');
+            document.getElementById('displayStudentInfo').innerText = `${studentData.name} (${studentData.class})`;
+
+            renderQuestions();
+        }
+
+        // RENDER QUESTIONS
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questionsData.forEach((q, index) => {
+                let questionHtml = `
+                    <div class="p-5 md:p-6 bg-white rounded-xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between text-xs font-semibold">
+                            <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-md">Soal No. ${index + 1} (${q.type.toUpperCase()})</span>
+                            <span class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md">Tingkat: ${q.cognitive} | Bobot: ${q.weight} Poin</span>
+                        </div>
+                        <p class="text-slate-800 font-medium text-sm md:text-base leading-relaxed">${q.question}</p>
+                `;
+
+                if (q.type === 'pg') {
+                    questionHtml += `<div class="space-y-2">`;
+                    q.options.forEach((opt) => {
+                        questionHtml += `
+                            <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition text-sm">
+                                <input type="radio" name="q_${q.id}" value="${opt}" required class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                                <span>${opt}</span>
+                            </label>
+                        `;
+                    });
+                    questionHtml += `</div>`;
+                } else if (q.type === 'pgk') {
+                    questionHtml += `<div class="space-y-2"><p class="text-xs text-indigo-600 font-medium">*Pilih satu atau lebih jawaban yang tepat:</p>`;
+                    q.options.forEach((opt) => {
+                        questionHtml += `
+                            <label class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition text-sm">
+                                <input type="checkbox" name="q_${q.id}" value="${opt}" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500">
+                                <span>${opt}</span>
+                            </label>
+                        `;
+                    });
+                    questionHtml += `</div>`;
+                } else if (q.type === 'bs') {
+                    questionHtml += `
+                        <div class="flex gap-4">
+                            <label class="flex-1 text-center py-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition text-sm font-semibold">
+                                <input type="radio" name="q_${q.id}" value="BENAR" required class="mr-2 text-indigo-600"> BENAR
+                            </label>
+                            <label class="flex-1 text-center py-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition text-sm font-semibold">
+                                <input type="radio" name="q_${q.id}" value="SALAH" required class="mr-2 text-indigo-600"> SALAH
+                            </label>
+                        </div>
+                    `;
+                }
+
+                questionHtml += `</div>`;
+                container.innerHTML += questionHtml;
+            });
+        }
+
+        // SUBMIT QUIZ & CALCULATE SCORE
+        function submitQuiz(e) {
+            e.preventDefault();
+            let totalScore = 0;
+
+            questionsData.forEach((q) => {
+                if (q.type === 'pg') {
+                    const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        totalScore += q.weight;
+                    }
+                } else if (q.type === 'bs') {
+                    const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        totalScore += q.weight;
+                    }
+                } else if (q.type === 'pgk') {
+                    const selectedBoxes = Array.from(document.querySelectorAll(`input[name="q_${q.id}"]:checked`)).map(cb => cb.value);
+                    const isCorrect = q.answers.length === selectedBoxes.length && q.answers.every(val => selectedBoxes.includes(val));
+                    if (isCorrect) {
+                        totalScore += q.weight;
+                    }
+                }
+            });
+
+            // Display Results
+            document.getElementById('quizPage').classList.add('hidden');
+            document.getElementById('resultPage').classList.remove('hidden');
+            document.getElementById('scoreDisplay').innerText = totalScore;
+
+            // Send Data to Google Sheet
+            sendDataToAppsScript(studentData.name, studentData.class, totalScore);
+        }
+
+        // SEND DATA TO APPS SCRIPT (REALTIME VIA FORM DATA PARAMS)
+        function sendDataToAppsScript(name, className, score) {
+            const syncStatus = document.getElementById('syncStatus');
+
+            if (!SCRIPT_URL || SCRIPT_URL.trim() === "") {
+                syncStatus.className = "p-3 bg-amber-50 text-amber-700 rounded-xl text-xs md:text-sm font-medium";
+                syncStatus.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i> Mode Pratinjau: Aplikasi belum dihubungkan ke URL Apps Script. Nilai tersimpan secara lokal.`;
+                return;
+            }
+
+            const formData = new URLSearchParams();
+            formData.append("timestamp", new Date().toLocaleString("id-ID"));
+            formData.append("nama", name);
+            formData.append("kelas", className);
+            formData.append("nilai", score);
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: formData.toString()
+            })
+            .then(() => {
+                syncStatus.className = "p-3 bg-emerald-50 text-emerald-700 rounded-xl text-xs md:text-sm font-medium";
+                syncStatus.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Data berhasil tersimpan secara realtime di Google Spreadsheet!`;
+            })
+            .catch((err) => {
+                console.error(err);
+                syncStatus.className = "p-3 bg-red-50 text-red-700 rounded-xl text-xs md:text-sm font-medium";
+                syncStatus.innerHTML = `<i class="fas fa-times-circle mr-2"></i> Gagal menyinkronkan data. Periksa koneksi internet Anda.`;
+            });
+        }
+    </script>
+</body>
+</html>
